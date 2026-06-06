@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.flightbookingapi.dto.BookingRequest;
 import com.example.flightbookingapi.dto.BookingResponse;
+import com.example.flightbookingapi.exception.FlightFullException;
+import com.example.flightbookingapi.exception.FlightNotFoundException;
 import com.example.flightbookingapi.model.Booking;
 import com.example.flightbookingapi.model.Flight;
 import com.example.flightbookingapi.repository.InMemoryStorage;
@@ -25,11 +27,15 @@ public class BookingService {
                 .get(request.getFlightNumber());
 
         if (flight == null) {
-            throw new RuntimeException("Flight not found");
+            throw new FlightNotFoundException(
+                    "Flight " + request.getFlightNumber() + " not found"
+            );
         }
 
         if (flight.getBookedSeats() >= flight.getCapacity()) {
-            throw new RuntimeException("Flight is fully booked");
+            throw new FlightFullException(
+                    "Flight " + request.getFlightNumber() + " is fully booked"
+            );
         }
 
         flight.setBookedSeats(
@@ -56,4 +62,3 @@ public class BookingService {
         );
     }
 }
-
