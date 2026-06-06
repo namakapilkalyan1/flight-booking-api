@@ -23,8 +23,11 @@ public class BookingService {
 
     public BookingResponse createBooking(BookingRequest request) {
 
-        Flight flight = storage.getFlights()
-                .get(request.getFlightNumber());
+        String flightNumber = request.getFlightNumber().trim();
+
+        String passengerName = request.getPassengerName().trim();
+
+        Flight flight = storage.getFlights().get(flightNumber);
 
         if (flight == null) {
             throw new FlightNotFoundException(
@@ -32,15 +35,20 @@ public class BookingService {
             );
         }
 
-        if (flight.getBookedSeats() >= flight.getCapacity()) {
-            throw new FlightFullException(
-                    "Flight " + request.getFlightNumber() + " is fully booked"
+        synchronized (flight) {
+
+            if (flight.getBookedSeats() >= flight.getCapacity()) {
+
+                throw new FlightFullException(
+                        "Flight " + flightNumber
+                                + " is fully booked"
+                );
+            }
+
+            flight.setBookedSeats(
+                    flight.getBookedSeats() + 1
             );
         }
-
-        flight.setBookedSeats(
-                flight.getBookedSeats() + 1
-        );
 
         String bookingId = UUID.randomUUID().toString();
 

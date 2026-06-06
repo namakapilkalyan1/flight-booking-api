@@ -11,6 +11,8 @@ import com.example.flightbookingapi.dto.BookingRequest;
 import com.example.flightbookingapi.dto.BookingResponse;
 import com.example.flightbookingapi.service.BookingService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
@@ -25,7 +27,7 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingResponse createBooking(
-            @RequestBody BookingRequest request) {
+        @Valid @RequestBody BookingRequest request) {
 
         return bookingService.createBooking(request);
     }

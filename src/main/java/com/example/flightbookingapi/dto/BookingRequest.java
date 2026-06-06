@@ -1,8 +1,13 @@
 package com.example.flightbookingapi.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class BookingRequest {
 
+   @NotBlank(message = "Flight number is required")
     private String flightNumber;
+
+    @NotBlank(message = "Passenger name is required")
     private String passengerName;
 
     public String getFlightNumber() {

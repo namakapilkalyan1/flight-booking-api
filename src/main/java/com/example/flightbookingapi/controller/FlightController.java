@@ -1,6 +1,7 @@
 package com.example.flightbookingapi.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +30,10 @@ public class FlightController {
             @Valid @RequestBody CreateFlightRequest request) {
 
         return flightService.createFlight(request);
+    }
+
+    @GetMapping("/health")
+    public String health() {
+        return "UP";
     }
 }

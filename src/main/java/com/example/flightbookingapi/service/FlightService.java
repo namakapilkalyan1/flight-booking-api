@@ -18,20 +18,23 @@ public class FlightService {
 
     public Flight createFlight(CreateFlightRequest request) {
 
+        String flightNumber = request.getFlightNumber().trim();
+
         Flight flight = new Flight(
-                request.getFlightNumber(),
+                flightNumber,
                 request.getCapacity()
         );
 
-        if (storage.getFlights().containsKey(request.getFlightNumber())) {
+        if (storage.getFlights().containsKey(flightNumber)) {
 
             throw new DuplicateFlightException(
-                    "Flight already exists"
+                "Flight " + flightNumber
+                        + " already exists"
             );
         }
 
         storage.getFlights().put(
-                request.getFlightNumber(),
+                flightNumber,
                 flight
         );
 
